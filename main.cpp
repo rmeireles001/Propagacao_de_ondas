@@ -6,8 +6,8 @@
 using namespace std;
 
 void teste(int inicio, int fim, string m, string range){
-	propagacao p;
-	p.run_lj("areas.txt", "areas_lj#"+m+"R"+range+".txt", inicio, fim);
+	//propagacao p;
+	//p.run_lj("areas.txt", "areas_lj#"+m+"R"+range+".txt", inicio, fim);
 	clock_t start, end;
 	propagacao p2;
 	p2.inserir("areas.txt");
