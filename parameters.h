@@ -1,5 +1,5 @@
-#define ANTS 20
-#define ncmax 15
+#define ANTS 10
+#define ncmax 10
 #define runs 1
 #define gamma 0.1
 #define rho 0.1
