@@ -1,4 +1,4 @@
-#define ANTS 10
+#define ANTS 20
 #define ncmax 10
 #define runs 1
 #define gamma 0.1
