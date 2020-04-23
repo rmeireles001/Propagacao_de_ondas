@@ -8,8 +8,8 @@
 using namespace std;
 
 void teste(int inicio, int fim, string m, string range){
-	//propagacao p;
-	//p.run_lj("areas.txt", "areas_lj#"+m+"R"+range+".txt", inicio, fim);
+	propagacao p;
+	p.run_lj("areas.txt", "areas_lj#"+m+"R"+range+".txt", inicio, fim);
 	clock_t start, end;
 	propagacao p2;
 	p2.inserir("areas.txt");
@@ -46,7 +46,7 @@ double run_aco(int inicio, int fim){
 	return (double)(end-start)/(double)(CLOCKS_PER_SEC);
 }
 
-double run_lj(inicio, fim){
+double run_lj(int inicio, int fim){
 	clock_t start, end;
 	double img;
 	propagacao p;
