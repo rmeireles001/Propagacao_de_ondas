@@ -117,9 +117,9 @@ int main(){
 	teste(256,755, "2", "500");
 	teste(501,1000, "3", "500");*/
 
-	FILE *saida = fopen("saida_aco.txt", "w");
+	FILE *saida = fopen("saida_lj.txt", "w");
 
-	count_aco(saida, 1, 100);
+	/*count_aco(saida, 1, 100);
 	count_aco(saida, 451, 550);
 	count_aco(saida, 901, 1000);
 
@@ -131,7 +131,7 @@ int main(){
 	count_aco(saida, 256, 755);
 	count_aco(saida, 501, 1000);
 
-/*
+*/
 	count_lj(saida, 1, 100);
 	count_lj(saida, 451, 550);
 	count_lj(saida, 901, 1000);
@@ -143,6 +143,6 @@ int main(){
 	count_lj(saida, 1, 500);
 	count_lj(saida, 256, 755);
 	count_lj(saida, 501, 1000);
-*/
+	
 	fclose(saida);
 }
