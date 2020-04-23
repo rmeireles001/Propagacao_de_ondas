@@ -266,8 +266,8 @@ double propagacao::luus_jaakola(int pos){
 	Rr = 0.0;
 	//G[] = 0.0;
 
-	n_out = 100;
-	n_in = 100;
+	n_out = 1;
+	n_in = 1;
 	eps = 0.05;
 
 	mini = 0.0;
