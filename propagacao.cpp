@@ -307,23 +307,14 @@ double propagacao::luus_jaakola(int pos){
 			}
 	//	}
 		atribuirA(pos, newconfig);
-		cout << "\taux1-> atribuiu\n";
 		prob_inverso(pos);
-		cout << "\taux1-> calculou\n";
 		aux1 = erroG(pos);
-		cout << "\taux1-> calculou o erro\n";
 		custo++;
 		atribuirA(pos, oldconfig);
-		cout << "\taux2-> atribuiu\n";
 		prob_inverso(pos);
-		cout << "\taux2-> calculou\n";
 		aux2 = erroG(pos);
-		cout << "\taux2-> calculou o erro\n";
 		custo++;
-		cout << "qbest: "<< qbest << " condição: " << condicao << " PAROU: " << PAROU << endl;
-		cout << "aux1: " << aux1 << " aux2: " << aux2 << endl;
 		if(aux1<=aux2){
-			cout << "aux1 é menor que aux2\n";
 			qbest = aux1;
 			oldconfig = newconfig;
 		}
