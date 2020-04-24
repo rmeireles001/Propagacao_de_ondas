@@ -311,7 +311,7 @@ double propagacao::luus_jaakola(int pos){
 		custo++;
 		cout << "qbest: "<< qbest << " condição: " << condicao << endl;
 		cout << "aux1: " << aux1 << " aux2: " << aux2 << endl;
-		if(aux1<aux2){
+		if(aux1<=aux2){
 			cout << "aux1 é menor que aux2\n";
 			qbest = aux1;
 			oldconfig = newconfig;
