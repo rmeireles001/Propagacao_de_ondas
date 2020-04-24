@@ -281,7 +281,7 @@ double propagacao::luus_jaakola(int pos){
 	aux1 = 1000;
 	qbest = 1000;
 	i = 1.0;
-	condicao = pow(10, -10);
+	condicao = pow(10, -9);
 
 	while(qbest > condicao){
 		//for(j=1; j<=n_in; j++){
