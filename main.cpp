@@ -57,6 +57,7 @@ double run_lj(int inicio, int fim){
 	p.prob_direto(inicio, p.G);
 	start = clock();
 	for(int i=inicio; i<=fim; i++){
+		printf("Área: %d\n", i);
 		img = p.luus_jaakola(i);
 		p.atribuirA(i, img);
 		p.prob_inverso(i);
