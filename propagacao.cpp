@@ -284,7 +284,7 @@ double propagacao::luus_jaakola(int pos){
 	condicao = pow(10, -10);
 
 	while(qbest > condicao){
-		for(j=1; j<=n_in; j++){
+		//for(j=1; j<=n_in; j++){
 			randomico = prand(0, 1);
 			Rr = ((-0.5 + randomico)*(r));
 			newconfig = oldconfig + Rr;
@@ -294,17 +294,24 @@ double propagacao::luus_jaakola(int pos){
 			if(newconfig > maxi){
 				newconfig = maxi;
 			}
-		}
+	//	}
 		atribuirA(pos, newconfig);
+		cout << "\taux1-> atribuiu\n";
 		prob_inverso(pos);
+		cout << "\taux1-> calculou\n";
 		aux1 = erroG(pos);
+		cout << "\taux1-> calculou o erro\n";
 		custo++;
 		atribuirA(pos, oldconfig);
+		cout << "\taux2-> atribuiu\n";
 		prob_inverso(pos);
+		cout << "\taux2-> calculou\n";
 		aux2 = erroG(pos);
+		cout << "\taux2-> calculou o erro\n";
 		custo++;
+		cout << "qbest: "<< qbest << " condição: " << condicao << endl;
 		if(aux1<aux2){
-			cout << "qbest: "<< qbest << " condição: " << condicao << endl;
+			cout << "aux1 é menor que aux2\n";
 			qbest = aux1;
 			oldconfig = newconfig;
 		}
