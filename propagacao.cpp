@@ -315,12 +315,13 @@ double propagacao::luus_jaakola(int pos){
 			cout << "aux1 é menor que aux2\n";
 			qbest = aux1;
 			oldconfig = newconfig;
+			r = ((1 - eps)*r);
 		}
 		PAROU++;
 
 		i++;
 
-		r = ((1 - eps)*r);
+		
 	}
 	config[pos] = custo;
 	return oldconfig;
