@@ -4,6 +4,8 @@
 #include "aco.h"
 
 #define contagem 10
+#define ini 450
+#define fi 550
 
 using namespace std;
 
@@ -87,6 +89,7 @@ void count_lj(FILE *resposta, int inicio, int fim){
 	double med=0, var=0;
 	double tempos[contagem];
 	fprintf(resposta, "LUUS JAAKOLA ÁREAS %d - %d\n\n", inicio, fim);
+	printf("LUUS JAAKOLA ÁREAS %d - %d\n\n", inicio, fim);
 	for(int i=0; i<contagem; i++){
 		tempos[i] = run_lj(inicio, fim);
 		fprintf(resposta, "%lf\t", tempos[i]);
@@ -105,6 +108,7 @@ void count_lj(FILE *resposta, int inicio, int fim){
 
 int main(){
 	srand(time(NULL));
+
 	/*teste(1,100, "1", "100");
 	teste(455,554, "2", "100");
 	teste(991,1000, "3", "100");
@@ -129,9 +133,9 @@ int main(){
 
 	count_aco(saida, 1, 500);
 	count_aco(saida, 256, 755);
-	count_aco(saida, 501, 1000);
+	count_aco(saida, 501, 1000);*/
 
-*/
+
 	count_lj(saida, 1, 100);
 	count_lj(saida, 451, 550);
 	count_lj(saida, 901, 1000);

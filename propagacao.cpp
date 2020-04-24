@@ -304,6 +304,7 @@ double propagacao::luus_jaakola(int pos){
 		aux2 = erroG(pos);
 		custo++;
 		if(aux1<aux2){
+			cout << "qbest: "<< qbest << " condição: " << condicao << endl;
 			qbest = aux1;
 			oldconfig = newconfig;
 		}
