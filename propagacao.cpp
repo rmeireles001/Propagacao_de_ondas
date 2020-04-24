@@ -265,7 +265,7 @@ double propagacao::luus_jaakola(int pos){
 	int n_in, i, j, k, it, n_out, PAROU=0, aux, atrib, x, custo=0;
 	Rr = 0.0;
 	//G[] = 0.0;
-
+	double checkin, pcheckin;
 	n_out = 1;
 	n_in = 1;
 	eps = 0.05;
@@ -282,9 +282,20 @@ double propagacao::luus_jaakola(int pos){
 	qbest = 1000;
 	i = 1.0;
 	condicao = pow(10, -9);
-
+	checkin = qbest;
+	pcheckin = 0;
 	while(qbest > condicao){
 		//for(j=1; j<=n_in; j++){
+			if(checkin==pcheckin){
+				PAROU++;
+			}
+			else{
+				PAROU=0;
+			}
+			if(PAROU==300){
+				config[pos] = custo;
+				return oldconfig;
+			}
 			randomico = prand(0, 1);
 			Rr = ((-0.5 + randomico)*(r));
 			newconfig = oldconfig + Rr;
@@ -309,19 +320,19 @@ double propagacao::luus_jaakola(int pos){
 		aux2 = erroG(pos);
 		cout << "\taux2-> calculou o erro\n";
 		custo++;
-		cout << "qbest: "<< qbest << " condição: " << condicao << endl;
+		cout << "qbest: "<< qbest << " condição: " << condicao << " PAROU: " << PAROU << endl;
 		cout << "aux1: " << aux1 << " aux2: " << aux2 << endl;
 		if(aux1<=aux2){
 			cout << "aux1 é menor que aux2\n";
 			qbest = aux1;
 			oldconfig = newconfig;
-			r = ((1 - eps)*r);
 		}
-		PAROU++;
 
 		i++;
 
-		
+		r = ((1 - eps)*r);
+		pcheckin = checkin;
+		checkin = qbest;
 	}
 	config[pos] = custo;
 	return oldconfig;
