@@ -310,6 +310,7 @@ double propagacao::luus_jaakola(int pos){
 		cout << "\taux2-> calculou o erro\n";
 		custo++;
 		cout << "qbest: "<< qbest << " condição: " << condicao << endl;
+		cout << "aux1: " << aux1 << " aux2: " << aux2 << endl;
 		if(aux1<aux2){
 			cout << "aux1 é menor que aux2\n";
 			qbest = aux1;
