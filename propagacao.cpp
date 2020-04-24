@@ -284,28 +284,16 @@ double propagacao::luus_jaakola(int pos){
 	condicao = pow(10, -9);
 	checkin = qbest;
 	pcheckin = 0;
-	while(qbest > condicao){
-		//for(j=1; j<=n_in; j++){
-			if(checkin==pcheckin){
-				PAROU++;
-			}
-			else{
-				PAROU=0;
-			}
-			if(PAROU==300){
-				config[pos] = custo;
-				return oldconfig;
-			}
-			randomico = prand(0, 1);
-			Rr = ((-0.5 + randomico)*(r));
-			newconfig = oldconfig + Rr;
-			if(newconfig < mini){
-				newconfig = mini;
-			}
-			if(newconfig > maxi){
-				newconfig = maxi;
-			}
-	//	}
+	while(qbest > condicao && PAROU<1000){
+		randomico = prand(0, 1);
+		Rr = ((-0.5 + randomico)*(r));
+		newconfig = oldconfig + Rr;
+		if(newconfig < mini){
+			newconfig = mini;
+		}
+		if(newconfig > maxi){
+			newconfig = maxi;
+		}
 		atribuirA(pos, newconfig);
 		prob_inverso(pos);
 		aux1 = erroG(pos);
@@ -320,7 +308,7 @@ double propagacao::luus_jaakola(int pos){
 		}
 
 		i++;
-
+		PAROU++;
 		r = ((1 - eps)*r);
 		pcheckin = checkin;
 		checkin = qbest;

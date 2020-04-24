@@ -8,6 +8,7 @@
 #define fi 550
 
 using namespace std;
+string int2str(int num);
 
 void teste(int inicio, int fim, string m, string range){
 	propagacao p;
@@ -30,7 +31,7 @@ void teste(int inicio, int fim, string m, string range){
 	a.end();
 }
 
-double run_aco(int inicio, int fim){
+double run_aco(int inicio, int fim, string runn){
 	clock_t start, end;
 	propagacao p;
 	p.inserir("areas.txt");
@@ -45,10 +46,11 @@ double run_aco(int inicio, int fim){
 		p.prob_inverso(i);
 	}
 	end = clock();
+	p.escrever_txt(runn, "ANTCOLONY OPTIMIZATION", (double)(end-start)/(double)(CLOCKS_PER_SEC), inicio, fim);
 	return (double)(end-start)/(double)(CLOCKS_PER_SEC);
 }
 
-double run_lj(int inicio, int fim){
+double run_lj(int inicio, int fim, string runn){
 	clock_t start, end;
 	double img;
 	propagacao p;
@@ -62,6 +64,7 @@ double run_lj(int inicio, int fim){
 		p.prob_inverso(i);
 	}
 	end = clock();
+	p.escrever_txt(runn, "LUUS JAAKOLA", (double)(end-start)/(double)(CLOCKS_PER_SEC), inicio, fim);
 	return (double)(end-start)/(double)(CLOCKS_PER_SEC);
 }
 
@@ -70,7 +73,7 @@ void count_aco(FILE *resposta, int inicio, int fim){
 	double tempos[contagem];
 	fprintf(resposta, "ANTCOLONY OPTIMIZATION ÁREAS %d - %d\n\n", inicio, fim);
 	for(int i=0; i<contagem; i++){
-		tempos[i] = run_aco(inicio, fim);
+		tempos[i] = run_aco(inicio, fim,"aco_run#"+int2str(i)+".txt");
 		fprintf(resposta, "%lf\t", tempos[i]);
 		cout << tempos[i] << endl;
 	}
@@ -90,7 +93,7 @@ void count_lj(FILE *resposta, int inicio, int fim){
 	double tempos[contagem];
 	fprintf(resposta, "LUUS JAAKOLA ÁREAS %d - %d\n\n", inicio, fim);
 	for(int i=0; i<contagem; i++){
-		tempos[i] = run_lj(inicio, fim);
+		tempos[i] = run_lj(inicio, fim, "lj_run#"+int2str(i)+".txt");
 		fprintf(resposta, "%lf\t", tempos[i]);
 		cout << tempos[i] << endl;
 	}
@@ -105,21 +108,19 @@ void count_lj(FILE *resposta, int inicio, int fim){
 	fprintf(resposta, "\n\nMédia: %lf\tVariância: %lf\tDesvio-padrão: %lf\n\n\n", med, var, sqrt(var));
 }
 
+string int2str(int num){
+	string ret="";
+	int bit;
+	while(num>0){
+		bit = num%10;
+		num = (num-bit)/10;
+		ret = (char)(bit+48)+ret;
+	}
+	return ret;
+}
+
 int main(){
 	srand(time(NULL));
-	propagacao p;
-	double img;
-	p.inserir("areas.txt");
-	p.prob_direto(1000, p.Gexp);
-	p.prob_direto(ini, p.G);
-
-	for(int i=ini; i<=fi; i++){
-		cout << "------------------------\nÁrea no: " << i << endl;
-		img = p.luus_jaakola(i);
-		p.atribuirA(i, img);
-		p.prob_inverso(i);
-	}
-	p.escrever_txt("teste_lj.txt", "LUUS JAAKOLA", 0.00, ini, fi);
 	/*teste(1,100, "1", "100");
 	teste(455,554, "2", "100");
 	teste(991,1000, "3", "100");
@@ -132,32 +133,11 @@ int main(){
 	teste(256,755, "2", "500");
 	teste(501,1000, "3", "500");*/
 
-	/*FILE *saida = fopen("saida_lj.txt", "w");
+	FILE *saida = fopen("saida_lj.txt", "w");
 
-	/*count_aco(saida, 1, 100);
-	count_aco(saida, 451, 550);
-	count_aco(saida, 901, 1000);
-
-	count_aco(saida, 1, 250);
-	count_aco(saida, 381, 630);
-	count_aco(saida, 751, 1000);
-
-	count_aco(saida, 1, 500);
-	count_aco(saida, 256, 755);
-	count_aco(saida, 501, 1000);
-
-
-	count_lj(saida, 1, 100);
-	count_lj(saida, 451, 550);
-	count_lj(saida, 901, 1000);
-
-	count_lj(saida, 1, 250);
-	count_lj(saida, 381, 630);
-	count_lj(saida, 751, 1000);
-
-	count_lj(saida, 1, 500);
-	count_lj(saida, 256, 755);
-	count_lj(saida, 501, 1000);
+	count_aco(saida, 1, 1000);
+	count_lj(saida, 1, 1000);
 	
-	fclose(saida);*/
+	fclose(saida);
+
 }
