@@ -59,6 +59,7 @@ double run_lj(int inicio, int fim, string runn){
 	p.prob_direto(inicio, p.G);
 	start = clock();
 	for(int i=inicio; i<=fim; i++){
+		cout << "Execução#" << runn << " area#" << i << endl;
 		img = p.luus_jaakola(i);
 		p.atribuirA(i, img);
 		p.prob_inverso(i);
