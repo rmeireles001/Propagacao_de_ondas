@@ -273,8 +273,8 @@ double propagacao::luus_jaakola(int pos){
 	n_in = 1;
 	eps = 0.05;
 
-	mini = -2;//0.0;
-	maxi = 2;//1.0;
+	mini = 0.0;
+	maxi = 1.0;
 
 	r = maxi-mini;
 
@@ -302,10 +302,6 @@ double propagacao::luus_jaakola(int pos){
 		atribuirA(pos, oldconfig);
 		prob_inverso(pos);
 		aux2 = erroG(pos);
-		custo++;
-		aux1 = func(newconfig);
-		custo++;
-		aux2 = func(oldconfig);
 		custo++;
 		if(aux1<=aux2){
 			qbest = aux1;
