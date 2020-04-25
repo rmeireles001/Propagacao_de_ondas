@@ -260,18 +260,21 @@ double prand(double low, double high)
     return ( (double)rand() * ( high - low ) ) / (double)RAND_MAX + low;
 }
 
+double func(double x){
+	return pow(x-2, 2)+2;
+}
+
 double propagacao::luus_jaakola(int pos){
 	double mini, maxi, Rr, r, eps, aux1, aux2, aux1ant, qbest, t1, condicao, randomico, newconfig, oldconfig;
 	int n_in, i, j, k, it, n_out, PAROU=0, aux, atrib, x, custo=0;
 	Rr = 0.0;
 	//G[] = 0.0;
-	double checkin, pcheckin;
 	n_out = 1;
 	n_in = 1;
 	eps = 0.05;
 
-	mini = 0.0;
-	maxi = 1.0;
+	mini = -2;//0.0;
+	maxi = 2;//1.0;
 
 	r = maxi-mini;
 
@@ -282,9 +285,7 @@ double propagacao::luus_jaakola(int pos){
 	qbest = 1000;
 	i = 1.0;
 	condicao = pow(10, -9);
-	checkin = qbest;
-	pcheckin = 0;
-	while(qbest > condicao && PAROU<1000){
+	while(/*qbest > condicao && */PAROU<300){
 		randomico = prand(0, 1);
 		Rr = ((-0.5 + randomico)*(r));
 		newconfig = oldconfig + Rr;
@@ -302,6 +303,10 @@ double propagacao::luus_jaakola(int pos){
 		prob_inverso(pos);
 		aux2 = erroG(pos);
 		custo++;
+		aux1 = func(newconfig);
+		custo++;
+		aux2 = func(oldconfig);
+		custo++;
 		if(aux1<=aux2){
 			qbest = aux1;
 			oldconfig = newconfig;
@@ -310,8 +315,6 @@ double propagacao::luus_jaakola(int pos){
 		i++;
 		PAROU++;
 		r = ((1 - eps)*r);
-		pcheckin = checkin;
-		checkin = qbest;
 	}
 	config[pos] = custo;
 	return oldconfig;

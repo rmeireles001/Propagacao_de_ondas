@@ -121,21 +121,10 @@ string int2str(int num){
 
 int main(){
 	srand(time(NULL));
-	/*teste(1,100, "1", "100");
-	teste(455,554, "2", "100");
-	teste(991,1000, "3", "100");
 
-	teste(1,250, "1", "250");
-	teste(381,630, "2", "250");
-	teste(751,1000, "3", "250");
+	FILE *saida = fopen("saida.txt", "w");
 
-	teste(1,500, "1", "500");
-	teste(256,755, "2", "500");
-	teste(501,1000, "3", "500");*/
-
-	FILE *saida = fopen("saida_lj.txt", "w");
-
-	count_aco(saida, 1, 1000);
+	//count_aco(saida, 1, 1000);
 	count_lj(saida, 1, 1000);
 	
 	fclose(saida);
