@@ -210,10 +210,11 @@ void aco::run(int section, propagacao *p){
 	lsaco *ls;
 	#endif
 	int runno, itno;
+	double condicao = pow(10, -10);
 	for(runno=0; runno<runs; runno++){
 		initialize_ants_variables(runno);
 		initialize_trail();
-		for(itno=0; itno<ncmax; itno++){
+		for(itno=0; itno<ncmax || bestval.var < condicao; itno++){
 			iteration_init(itno, ANTS);
 			find_values(ANTS);
 			analysis(itno, ANTS, section, p);

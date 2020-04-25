@@ -284,8 +284,8 @@ double propagacao::luus_jaakola(int pos){
 	aux1 = 1000;
 	qbest = 1000;
 	i = 1.0;
-	condicao = pow(10, -9);
-	while(/*qbest > condicao && */PAROU<300){
+	condicao = pow(10, -10);
+	while(qbest > condicao && PAROU<500){
 		randomico = prand(0, 1);
 		Rr = ((-0.5 + randomico)*(r));
 		newconfig = oldconfig + Rr;

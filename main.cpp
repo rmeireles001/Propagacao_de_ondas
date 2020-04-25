@@ -3,7 +3,7 @@
 #include "propagacao.h"
 #include "aco.h"
 
-#define contagem 10
+#define contagem 2
 #define ini 450
 #define fi 550
 
@@ -125,7 +125,7 @@ int main(){
 
 	FILE *saida = fopen("saida.txt", "w");
 
-	//count_aco(saida, 1, 1000);
+	count_aco(saida, 1, 1000);
 	count_lj(saida, 1, 1000);
 	
 	fclose(saida);
