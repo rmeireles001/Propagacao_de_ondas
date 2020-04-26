@@ -82,7 +82,7 @@ void count_aco(FILE *resposta, int inicio, int fim){
 	for(int i=0; i<contagem; i++){
 		var = var + pow(tempos[i] - med, 2);
 	}
-	var = var/(contagem-1);
+	var = var/(contagem);
 	fprintf(resposta, "\n\nMédia: %lf\tVariância: %lf\tDesvio-padrão: %lf\n\n\n", med, var, sqrt(var));
 }
 
@@ -102,7 +102,7 @@ void count_lj(FILE *resposta, int inicio, int fim){
 	for(int i=0; i<contagem; i++){
 		var = var + pow(tempos[i] - med, 2);
 	}
-	var = var/(contagem-1);
+	var = var/(contagem);
 	fprintf(resposta, "\n\nMédia: %lf\tVariância: %lf\tDesvio-padrão: %lf\n\n\n", med, var, sqrt(var));
 }
 
