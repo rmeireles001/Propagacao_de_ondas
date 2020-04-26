@@ -3,7 +3,8 @@
 #define tam 1000
 
 void insertionSort(double arr[], int n){
-	int i, j, key;
+	int i, j;
+	double key;
 	for(i=1; i<n; i++){
 		key = arr[i];
 		j = i - 1;
