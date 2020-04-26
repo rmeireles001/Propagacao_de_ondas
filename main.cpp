@@ -3,9 +3,7 @@
 #include "propagacao.h"
 #include "aco.h"
 
-#define contagem 2
-#define ini 450
-#define fi 550
+#define contagem 10
 
 using namespace std;
 string int2str(int num);
@@ -73,7 +71,7 @@ void count_aco(FILE *resposta, int inicio, int fim){
 	double med=0, var=0;
 	double tempos[contagem];
 	fprintf(resposta, "ANTCOLONY OPTIMIZATION ÁREAS %d - %d\n\n", inicio, fim);
-	for(int i=0; i<contagem; i++){
+	for(int i=1; i<=contagem; i++){
 		tempos[i] = run_aco(inicio, fim,"aco_run#"+int2str(i)+".txt");
 		fprintf(resposta, "%lf\t", tempos[i]);
 		cout << tempos[i] << endl;
@@ -93,7 +91,7 @@ void count_lj(FILE *resposta, int inicio, int fim){
 	double med=0, var=0;
 	double tempos[contagem];
 	fprintf(resposta, "LUUS JAAKOLA ÁREAS %d - %d\n\n", inicio, fim);
-	for(int i=0; i<contagem; i++){
+	for(int i=1; i<=contagem; i++){
 		tempos[i] = run_lj(inicio, fim, "lj_run#"+int2str(i)+".txt");
 		fprintf(resposta, "%lf\t", tempos[i]);
 		cout << tempos[i] << endl;
