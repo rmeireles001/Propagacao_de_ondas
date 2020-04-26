@@ -22,10 +22,10 @@ int main(){
 	int acomp=0, acopp=0, ljmp=0, ljpp=0;
 	FILE *f = fopen("tempos.txt", "r");
 	for(i=0; i<tam; i++){
-		fscanf(f, "%lf", aco[i]);
+		fscanf(f, "%lf", &aco[i]);
 	}
 	for(i=0; i<tam; i++){
-		fscanf(f, "%lf", lj[i]);
+		fscanf(f, "%lf", &lj[i]);
 	}
 	fclose(f);
 	for(i=0; i<tam; i++){
