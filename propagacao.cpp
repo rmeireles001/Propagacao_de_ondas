@@ -360,3 +360,38 @@ void propagacao::escrever_txt(string saida, string metodo, double tempo, int ini
 	fprintf(resultados, "Tempo gasto: %lf\n", tempo);
 	fclose(resultados);
 }
+
+double function(double x){
+	return pow(x-1.5, 2)+3;
+}
+
+double propagacao::cgrasp(double llimit, double ulimit, double incr){
+	double fbest = 1e10;
+	double xbest = 0;
+	double f;
+	//Busca linear / construção
+	for(double x=llimit; x<=ulimit; x+=incr){
+		f = function(x);
+		if(f<fbest){
+			fbest = f;
+			xbest = x;
+		}
+	}
+	//Busca local. Vizinhança anterior
+	for(double x=xbest-incr; x>=llimit && x<xbest; x+=0.01){
+		f = function(x);
+		if(f<fbest){
+			fbest = f;
+			xbest = x;
+		}
+	}
+	//Busca local. Vizinhança posterior
+	for(double x=xbest; x<=ulimit && x<=xbest+incr; x+=0.01){
+		f = function(x);
+		if(f<fbest){
+			fbest = f;
+			xbest = x;
+		}
+	}
+	return xbest;
+}

@@ -120,11 +120,13 @@ string int2str(int num){
 int main(){
 	srand(time(NULL));
 
-	FILE *saida = fopen("saida.txt", "w");
+	/*FILE *saida = fopen("saida.txt", "w");
 
 	count_aco(saida, 1, 1000);
 	count_lj(saida, 1, 1000);
 	
-	fclose(saida);
-
+	fclose(saida);*/
+	propagacao p;
+	double x;
+	cout << (x = p.cgrasp(-2, 2, 0.05)) << " " << function(x) << endl;
 }
