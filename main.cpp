@@ -66,6 +66,25 @@ double run_lj(int inicio, int fim, string runn){
 	return (double)(end-start)/(double)(CLOCKS_PER_SEC);
 }
 
+double run_cgrasp(int inicio, int fim, string runn){
+	clock_t start, end;
+	double img;
+	propagacao p;
+	p.inserir("areas.txt");
+	p.prob_direto(1000, p.Gexp);
+	p.prob_direto(inicio, p.G);
+	start = clock();
+	for(int i=inicio; i<=fim; i++){
+		img = p.cgrasp(0, 1, 0.05, i);
+		p.atribuirA(i, img);
+		p.prob_inverso(i);
+	}
+	end = clock();
+	p.escrever_txt(runn, "C-GRASP", (double)(end-start)/(double)(CLOCKS_PER_SEC), inicio, fim);
+	return (double)(end-start)/(double)(CLOCKS_PER_SEC);
+}
+
+
 void count_aco(FILE *resposta, int inicio, int fim){
 	double med=0, var=0;
 	double tempos[contagem];
@@ -106,6 +125,26 @@ void count_lj(FILE *resposta, int inicio, int fim){
 	fprintf(resposta, "\n\nMédia: %lf\tVariância: %lf\tDesvio-padrão: %lf\n\n\n", med, var, sqrt(var));
 }
 
+void count_cgrasp(FILE *resposta, int inicio, int fim){
+	double med=0, var=0;
+	double tempos[contagem];
+	fprintf(resposta, "C-GRASP ÁREAS %d - %d\n\n", inicio, fim);
+	for(int i=1; i<=contagem; i++){
+		tempos[i] = run_cgrasp(inicio, fim, "cgrasp_run#"+int2str(i)+".txt");
+		fprintf(resposta, "%lf\t", tempos[i]);
+		cout << tempos[i] << endl;
+	}
+	for(int i=0; i<contagem; i++){
+		med = med + tempos[i];
+	}
+	med=med/contagem;
+	for(int i=0; i<contagem; i++){
+		var = var + pow(tempos[i] - med, 2);
+	}
+	var = var/(contagem);
+	fprintf(resposta, "\n\nMédia: %lf\tVariância: %lf\tDesvio-padrão: %lf\n\n\n", med, var, sqrt(var));
+}
+
 string int2str(int num){
 	string ret="";
 	int bit;
@@ -120,13 +159,12 @@ string int2str(int num){
 int main(){
 	srand(time(NULL));
 
-	/*FILE *saida = fopen("saida.txt", "w");
+	FILE *saida = fopen("saida_cgrasp.txt", "w");
 
-	count_aco(saida, 1, 1000);
-	count_lj(saida, 1, 1000);
+	/*count_aco(saida, 1, 1000);
+	count_lj(saida, 1, 1000);*/
+
+	count_cgrasp(saida, 1, 1000);
 	
-	fclose(saida);*/
-	propagacao p;
-	double x;
-	cout << (x = p.cgrasp(-2, 2, 0.05)) << " " << function(x) << endl;
+	fclose(saida);
 }

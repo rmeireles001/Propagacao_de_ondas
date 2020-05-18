@@ -40,7 +40,8 @@ public:
 	void run_lj(string arq_areas, string saida, int inicio, int fim);
 	//void run_aco(string arq_areas, string saida, int inicio, int fim);
 	void escrever_txt(string saida, string metodo, double tempo, int inicio, int fim);
-	double cgrasp(double llimit, double ulimit, double incr);
+	double cgrasp(double llimit, double ulimit, double incr, int section);
+	void run_cgrasp(string arq_areas, string saida, int inicio, int fim);
 };
 
 double prand(double low, double high);

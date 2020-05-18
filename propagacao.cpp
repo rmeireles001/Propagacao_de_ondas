@@ -365,13 +365,16 @@ double function(double x){
 	return pow(x-1.5, 2)+3;
 }
 
-double propagacao::cgrasp(double llimit, double ulimit, double incr){
+double propagacao::cgrasp(double llimit, double ulimit, double incr, int section){
 	double fbest = 1e10;
 	double xbest = 0;
 	double f;
 	//Busca linear / construção
 	for(double x=llimit; x<=ulimit; x+=incr){
-		f = function(x);
+		atribuirA(section, x);
+		prob_inverso(section);
+		f = erroG(section);
+		config[section]++;
 		if(f<fbest){
 			fbest = f;
 			xbest = x;
@@ -379,7 +382,10 @@ double propagacao::cgrasp(double llimit, double ulimit, double incr){
 	}
 	//Busca local. Vizinhança anterior
 	for(double x=xbest-incr; x>=llimit && x<xbest; x+=0.01){
-		f = function(x);
+		atribuirA(section, x);
+		prob_inverso(section);
+		f = erroG(section);
+		config[section]++;
 		if(f<fbest){
 			fbest = f;
 			xbest = x;
@@ -387,11 +393,30 @@ double propagacao::cgrasp(double llimit, double ulimit, double incr){
 	}
 	//Busca local. Vizinhança posterior
 	for(double x=xbest; x<=ulimit && x<=xbest+incr; x+=0.01){
-		f = function(x);
+		atribuirA(section, x);
+		prob_inverso(section);
+		f = erroG(section);
+		config[section]++;
 		if(f<fbest){
 			fbest = f;
 			xbest = x;
 		}
 	}
 	return xbest;
+}
+
+void propagacao::run_cgrasp(string arq_areas, string saida, int inicio, int fim){
+	clock_t start, end;
+	double img;
+	inserir(arq_areas);
+	prob_direto(1000, Gexp);
+	prob_direto(inicio, G);
+	start = clock();
+	for(int i=inicio; i<=fim; i++){
+		img = cgrasp(0, 1, 0.05, i);
+		atribuirA(i, img);
+		prob_inverso(i);
+	}
+	end = clock();
+	escrever_txt(saida, "C-GRASP", (double)(end-start)/(double)(CLOCKS_PER_SEC), inicio, fim);
 }
