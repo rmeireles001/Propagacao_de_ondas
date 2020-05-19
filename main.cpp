@@ -3,7 +3,7 @@
 #include "propagacao.h"
 #include "aco.h"
 
-#define contagem 10
+#define contagem 1000
 
 using namespace std;
 string int2str(int num);
