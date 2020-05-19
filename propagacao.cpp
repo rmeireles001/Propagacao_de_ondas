@@ -370,7 +370,7 @@ double propagacao::cgrasp(double llimit, double ulimit, double incr, int section
 	double xbest = 0;
 	double f;
 	//Busca linear / construção
-	for(double x=llimit; x<=ulimit; x+=incr){
+	for(double x=llimit; x<=ulimit+0.1; x+=incr){
 		atribuirA(section, x);
 		prob_inverso(section);
 		f = erroG(section);
