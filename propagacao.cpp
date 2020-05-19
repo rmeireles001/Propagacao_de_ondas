@@ -379,6 +379,7 @@ double propagacao::cgrasp(double llimit, double ulimit, double incr, int section
 			fbest = f;
 			xbest = x;
 		}
+		cout << x << endl;
 	}
 	//Busca local. Vizinhança anterior
 	for(double x=xbest-incr; x>=llimit && x<xbest; x+=0.01){
