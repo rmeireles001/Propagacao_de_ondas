@@ -50,11 +50,11 @@ int main(){
 			ljmp = i+1;
 		}
 		if(cgrasp[i]>cgpior){
-			cgpior = cg[i];
+			cgpior = cgrasp[i];
 			cgpp = i+1;
 		}
 		if(cgrasp[i]<cgmelhor){
-			cgmelhor = cg[i];
+			cgmelhor = cgrasp[i];
 			cgmp = i+1;
 		}
 	}
