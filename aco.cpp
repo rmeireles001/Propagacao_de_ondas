@@ -210,7 +210,7 @@ void aco::run(int section, propagacao *p){
 	lsaco *ls;
 	#endif
 	int runno, itno;
-	double condicao = pow(10, -10);
+	double condicao = pow(10, -5);
 	for(runno=0; runno<runs; runno++){
 		initialize_ants_variables(runno);
 		initialize_trail();

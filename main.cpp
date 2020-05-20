@@ -159,10 +159,10 @@ string int2str(int num){
 int main(){
 	srand(time(NULL));
 
-	FILE *saida = fopen("saida_cgrasp.txt", "w");
+	FILE *saida = fopen("saida.txt", "w");
 
-	/*count_aco(saida, 1, 1000);
-	count_lj(saida, 1, 1000);*/
+	count_aco(saida, 1, 1000);
+	count_lj(saida, 1, 1000);
 
 	count_cgrasp(saida, 1, 1000);
 	

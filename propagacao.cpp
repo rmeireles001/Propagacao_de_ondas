@@ -284,7 +284,7 @@ double propagacao::luus_jaakola(int pos){
 	aux1 = 1000;
 	qbest = 1000;
 	i = 1.0;
-	condicao = pow(10, -10);
+	condicao = pow(10, -5);
 	while(qbest > condicao && PAROU<500){
 		randomico = prand(0, 1);
 		Rr = ((-0.5 + randomico)*(r));
@@ -368,10 +368,12 @@ double function(double x){
 double propagacao::cgrasp(double llimit, double ulimit, double incr, int section){
 	double fbest = 1e10;
 	double xbest = 0;
+	double xi, xf;
 	double f;
 	double max=ulimit+0.1;
+	int divisor = -2;
 	//Busca linear / construção
-	for(double x=llimit; x<=max; x+=incr){
+	for(double x=llimit; x<=max && fbest>1e-5; x+=incr){
 		atribuirA(section, x);
 		prob_inverso(section);
 		f = erroG(section);
@@ -381,28 +383,27 @@ double propagacao::cgrasp(double llimit, double ulimit, double incr, int section
 			xbest = x;
 		}
 	}
-	//Busca local. Vizinhança anterior
-	for(double x=xbest-incr; x>=llimit && x<xbest; x+=0.01){
-		atribuirA(section, x);
-		prob_inverso(section);
-		f = erroG(section);
-		config[section]++;
-		if(f<fbest){
-			fbest = f;
-			xbest = x;
+	while(divisor>=-5){
+		incr = pow(10, divisor);
+		xi = xbest - incr;
+		if(xi < llimit)
+			xi = llimit;
+		xf = xbest + incr;
+		if(xf > ulimit)
+			xf = ulimit;
+		for(double x=xi; x<=xf && fbest>1e-5; x+=incr){
+			atribuirA(section, x);
+			prob_inverso(section);
+			f = erroG(section);
+			config[section]++;
+			if(f<fbest){
+				fbest = f;
+				xbest = x;
+			}
 		}
+		divisor--;
 	}
-	//Busca local. Vizinhança posterior
-	for(double x=xbest; x<=ulimit && x<=xbest+incr; x+=0.01){
-		atribuirA(section, x);
-		prob_inverso(section);
-		f = erroG(section);
-		config[section]++;
-		if(f<fbest){
-			fbest = f;
-			xbest = x;
-		}
-	}
+	
 	return xbest;
 }
 
