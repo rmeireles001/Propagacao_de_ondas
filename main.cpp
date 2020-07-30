@@ -29,10 +29,10 @@ void teste(int inicio, int fim, string m, string range){
 	a.end();
 }
 
-double run_aco(int inicio, int fim, string runn){
+double run_aco(int inicio, int fim, string arq_areas, string runn){
 	clock_t start, end;
 	propagacao p;
-	p.inserir("areas.txt");
+	p.inserir(arq_areas);
 	p.prob_direto(1000, p.Gexp);
 	p.prob_direto(inicio, p.G);
 	aco a;
@@ -66,11 +66,11 @@ double run_lj(int inicio, int fim, string runn){
 	return (double)(end-start)/(double)(CLOCKS_PER_SEC);
 }
 
-double run_cgrasp(int inicio, int fim, string runn){
+double run_cgrasp(int inicio, int fim, string arq_areas, string runn){
 	clock_t start, end;
 	double img;
 	propagacao p;
-	p.inserir("areas.txt");
+	p.inserir(arq_areas);
 	p.prob_direto(1000, p.Gexp);
 	p.prob_direto(inicio, p.G);
 	start = clock();
@@ -85,12 +85,12 @@ double run_cgrasp(int inicio, int fim, string runn){
 }
 
 
-void count_aco(FILE *resposta, int inicio, int fim){
+void count_aco(FILE *resposta, string arq_areas, int inicio, int fim){
 	double med=0, var=0;
 	double tempos[contagem];
 	fprintf(resposta, "ANTCOLONY OPTIMIZATION ÁREAS %d - %d\n\n", inicio, fim);
 	for(int i=1; i<=contagem; i++){
-		tempos[i] = run_aco(inicio, fim,"aco_run#"+int2str(i)+".txt");
+		tempos[i] = run_aco(inicio, fim, arq_areas, "aco_run#"+int2str(i)+".txt");
 		fprintf(resposta, "%lf\t", tempos[i]);
 		cout << tempos[i] << endl;
 	}
@@ -125,12 +125,12 @@ void count_lj(FILE *resposta, int inicio, int fim){
 	fprintf(resposta, "\n\nMédia: %lf\tVariância: %lf\tDesvio-padrão: %lf\n\n\n", med, var, sqrt(var));
 }
 
-void count_cgrasp(FILE *resposta, int inicio, int fim){
+void count_cgrasp(FILE *resposta, string arq_areas, int inicio, int fim){
 	double med=0, var=0;
 	double tempos[contagem];
 	fprintf(resposta, "C-GRASP ÁREAS %d - %d\n\n", inicio, fim);
 	for(int i=1; i<=contagem; i++){
-		tempos[i] = run_cgrasp(inicio, fim, "cgrasp_run#"+int2str(i)+".txt");
+		tempos[i] = run_cgrasp(inicio, fim, arq_areas, "cgrasp_run#"+int2str(i)+".txt");
 		fprintf(resposta, "%lf\t", tempos[i]);
 		cout << tempos[i] << endl;
 	}
@@ -159,12 +159,29 @@ string int2str(int num){
 int main(){
 	srand(time(NULL));
 
-	FILE *saida = fopen("saida.txt", "w");
+	FILE *saida = fopen("resultados_finais.txt", "w");
 
-	count_aco(saida, 1, 1000);
-	count_lj(saida, 1, 1000);
+	count_aco(saida, "areas.txt", 1, 1000);
 
-	count_cgrasp(saida, 1, 1000);
+	count_cgrasp(saida, "areas.txt", 1, 1000);
 	
 	fclose(saida);
+	system("mkdir resultados#1\nmv resultados_finais.txt resultados\nmv *#*.txt resultados#1\n");
+	saida = fopen("resultados_finais.txt", "w");
+
+	count_aco(saida, "areas2.txt", 1, 1000);
+
+	count_cgrasp(saida, "areas2.txt", 1, 1000);
+	
+	fclose(saida);
+	system("mkdir resultados#2\nmv resultados_finais.txt resultados\nmv *#*.txt resultados#2\n");
+	saida = fopen("resultados_finais.txt", "w");
+
+	count_aco(saida, "areas3.txt", 1, 1000);
+
+	count_cgrasp(saida, "areas3.txt", 1, 1000);
+	
+	fclose(saida);
+	system("mkdir resultados#3\nmv resultados_finais.txt resultados\nmv *#*.txt resultados#3\n");
+	return 0;
 }

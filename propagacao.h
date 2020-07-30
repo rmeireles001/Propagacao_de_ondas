@@ -42,6 +42,7 @@ public:
 	void escrever_txt(string saida, string metodo, double tempo, int inicio, int fim);
 	double cgrasp(double llimit, double ulimit, double incr, int section);
 	void run_cgrasp(string arq_areas, string saida, int inicio, int fim);
+	void edit_areas();
 };
 
 double prand(double low, double high);
