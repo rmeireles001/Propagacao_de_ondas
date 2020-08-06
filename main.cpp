@@ -36,7 +36,7 @@ double run_aco(int inicio, int fim, string arq_areas, string runn){
 	p.prob_direto(1000, p.Gexp);
 	p.prob_direto(inicio, p.G);
 	aco a;
-	a.get_data(0, 1, 0.05);
+	a.get_data(0, 1, 0.01);
 	start = clock();
 	for(int i=inicio; i<=fim; i++){
 		a.run(i, &p);
@@ -161,11 +161,21 @@ int main(){
 
 	FILE *saida = fopen("resultados_finais.txt", "w");
 
+	count_aco(saida, "areas.txt", 1, 1000);
+
+	count_cgrasp(saida, "areas.txt", 1, 1000);
+	
+	fclose(saida);
+	system("mkdir resultados#1\nmv resultados_finais.txt resultados#1\nmv *#*.txt resultados#1\n");
+
+	saida = fopen("resultados_finais.txt", "w");
+
 	count_aco(saida, "areas2.txt", 1, 1000);
 
 	count_cgrasp(saida, "areas2.txt", 1, 1000);
 	
 	fclose(saida);
 	system("mkdir resultados#2\nmv resultados_finais.txt resultados#2\nmv *#*.txt resultados#2\n");
+
 	return 0;
 }
