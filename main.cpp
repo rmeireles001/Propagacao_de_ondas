@@ -36,7 +36,7 @@ double run_aco(int inicio, int fim, string arq_areas, string runn){
 	p.prob_direto(1000, p.Gexp);
 	p.prob_direto(inicio, p.G);
 	aco a;
-	a.get_data(0, 1, 0.01);
+	a.get_data(0, 1, 0.05);
 	start = clock();
 	for(int i=inicio; i<=fim; i++){
 		a.run(i, &p);
