@@ -167,7 +167,6 @@ int main(){
 	
 	fclose(saida);
 	system("mkdir resultados#1\nmv resultados_finais.txt resultados#1\nmv *#*.txt resultados#1\n");
-
 	saida = fopen("resultados_finais.txt", "w");
 
 	count_aco(saida, "areas2.txt", 1, 1000);
@@ -176,6 +175,13 @@ int main(){
 	
 	fclose(saida);
 	system("mkdir resultados#2\nmv resultados_finais.txt resultados#2\nmv *#*.txt resultados#2\n");
+	saida = fopen("resultados_finais.txt", "w");
 
+	count_aco(saida, "areas3.txt", 1, 1000);
+
+	count_cgrasp(saida, "areas3.txt", 1, 1000);
+	
+	fclose(saida);
+	system("mkdir resultados#3\nmv resultados_finais.txt resultados#3\nmv *#*.txt resultados#3\n");
 	return 0;
 }
