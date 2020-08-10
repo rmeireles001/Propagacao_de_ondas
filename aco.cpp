@@ -8,11 +8,17 @@ void aco::get_data(double llimit, double ulimit, double increment){
 	nevaluations=12;
 	var.init(llimit, ulimit, increment);
 	long int seed = time(NULL);
+	#if localsearch
+	ls = new lsaco;
+	ls->init();
+	#endif
 }
 
 void aco::end(){
 	cout << "Destruindo geral" << endl;
 	var.free();
+	#if localsearch
+	#endif
 }
 
 void aco::initialize_ants_variables(int runno){
@@ -206,9 +212,6 @@ void aco::some_stats(int iterationno, int runno){
 }
 
 void aco::run(int section, propagacao *p){
-	#if localsearch
-	lsaco *ls;
-	#endif
 	int runno, itno;
 	double condicao = pow(10, -5);
 	for(runno=0; runno<runs; runno++){
@@ -219,33 +222,46 @@ void aco::run(int section, propagacao *p){
 			find_values(ANTS);
 			analysis(itno, ANTS, section, p);
 			some_stats(itno, runno);
-			#if localsearch
-			ls = new lsaco;
-			ls->run(&bestval, &var, section, p, &seed);
-			#endif
 			trail();
 		}
 		some_stats(itno, runno);
 	}
+	#if localsearch
+	if(bestval.ofn > condicao){
+		ls->run(&bestval, &var, section, p, &seed);
+	}
+	#endif
 }
 
 double aco::get_var(){
 	return bestval.var;
 }
 
+void lsaco::init(){
+	var.init(0, 0.1, 0.01);
+	ant = (ants *) calloc(LSANTS, sizeof(ants));
+	for(int antno=0; antno<LSANTS; antno++){
+		ant[antno].init(0,0);
+	}
+}
+
 void lsaco::get_data(values *gvalptr, variable *varv){
 	double ll, ul, inc;
-	ul = gvalptr->var + (lsnvalues * (varv->increment));
+	ul = gvalptr->var + varv->increment;
 	if(ul > varv->ulimit){
 		ul = varv->ulimit;
 	}
-	ll = gvalptr->var - (lsnvalues * (varv->increment));
+	ll = gvalptr->var - varv->increment;
 	if(ll < varv->llimit){
 		ll = varv->llimit;
 	}
-	inc = varv->increment;
-	var.init(ll, ul, inc);
-	ant = (ants *) calloc(LSANTS, sizeof(ants));
+	var.increment = 0.01;
+	var.ulimit = ul;
+	var.llimit = ll;
+	for(int i=0; i<var.nvalues; i++){
+		var.trail[i] = 0;
+		var.prob[i] = 0;
+	}
 	for(int antno=0; antno<LSANTS; antno++){
 		ant[antno].init(0,0);
 	}

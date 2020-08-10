@@ -21,6 +21,7 @@
 
 
 using namespace std;
+class lsaco;
 
 struct trash{
 	double *help_b;
@@ -58,10 +59,14 @@ public:
 	void trail();
 	void run(int section, propagacao *p);
 	double get_var();
+	#if localsearch
+	lsaco *ls;
+	#endif
 };
 
 class lsaco : public aco{
 public:
+	void init();
 	void get_data(values *gvalptr, variable *varv);
 	void run(values *gvalptr, variable *varv, int section, propagacao *p, long int *s);
 	void some_stats(int iterationno);
