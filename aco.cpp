@@ -247,6 +247,7 @@ void aco::run(int section, propagacao *p){
 		}
 		some_stats(itno, runno);
 	}
+	cout << section << endl;
 	#if localsearch
 	if(bestval.ofn > condicao){
 		ls->run(&bestval, &var, section, p, &seed);
