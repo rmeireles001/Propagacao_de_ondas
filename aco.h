@@ -40,7 +40,9 @@ public:
 	trash t;
 	long int seed;
 	void get_data(double llimit, double ulimit, double increment);
+	void ls_data(double llimit, double ulimit, double increment);
 	void end();
+	void ls_end();
 	void initialize_ants_variables(int runno);
 	void initialize_trail();
 	void iteration_init(int iterationno, int nants);
@@ -58,6 +60,7 @@ public:
 	void ras_update(double *help_b);
 	void trail();
 	void run(int section, propagacao *p);
+	void ls_run(int section, propagacao *p, values *gvalptr, variable *varv);
 	double get_var();
 	#if localsearch
 	lsaco *ls;

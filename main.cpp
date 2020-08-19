@@ -3,7 +3,7 @@
 #include "propagacao.h"
 #include "aco.h"
 
-#define contagem 1000
+#define contagem 5
 
 using namespace std;
 string int2str(int num);
@@ -38,6 +38,7 @@ double run_aco(int inicio, int fim, string arq_areas, string runn){
 	aco a;
 	a.get_data(0, 1, 0.05);
 	start = clock();
+	cout << "Foi\n\n";
 	for(int i=inicio; i<=fim; i++){
 		a.run(i, &p);
 		p.atribuirA(i, a.get_var());
@@ -45,6 +46,7 @@ double run_aco(int inicio, int fim, string arq_areas, string runn){
 	}
 	end = clock();
 	p.escrever_txt(runn, "ANTCOLONY OPTIMIZATION", (double)(end-start)/(double)(CLOCKS_PER_SEC), inicio, fim);
+	a.end();
 	return (double)(end-start)/(double)(CLOCKS_PER_SEC);
 }
 
@@ -90,6 +92,7 @@ void count_aco(FILE *resposta, string arq_areas, int inicio, int fim){
 	double tempos[contagem];
 	fprintf(resposta, "ANTCOLONY OPTIMIZATION ÁREAS %d - %d\n\n", inicio, fim);
 	for(int i=1; i<=contagem; i++){
+		cout << "entou\n";
 		tempos[i] = run_aco(inicio, fim, arq_areas, "aco_run#"+int2str(i)+".txt");
 		fprintf(resposta, "%lf\t", tempos[i]);
 		cout << tempos[i] << endl;
@@ -160,15 +163,6 @@ int main(){
 	srand(time(NULL));
 
 	FILE *saida = fopen("resultados_finais.txt", "w");
-
-	count_aco(saida, "areas.txt", 1, 1000);
-
-	count_cgrasp(saida, "areas.txt", 1, 1000);
-	
-	fclose(saida);
-	system("mkdir resultados#1\nmv resultados_finais.txt resultados#1\nmv *#*.txt resultados#1\n");
-	saida = fopen("resultados_finais.txt", "w");
-
 	count_aco(saida, "areas2.txt", 1, 1000);
 
 	count_cgrasp(saida, "areas2.txt", 1, 1000);

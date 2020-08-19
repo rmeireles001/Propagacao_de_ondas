@@ -14,10 +14,30 @@ void aco::get_data(double llimit, double ulimit, double increment){
 	#endif
 }
 
+void aco::ls_data(double llimit, double ulimit, double increment){
+	ant = new ants[LSANTS];/*
+	runbestant = new ants[runs];
+	nevalbest = new long int[runs];
+	runbestval = new values[runs];*/
+	nevaluations=0;
+	var.init(llimit, ulimit, increment);
+	for(int antno=0; antno<LSANTS; antno++){
+		ant[antno].init(0, 0.0);
+	}
+	bestant.init(0, 1e25);
+	bestval.ofn=1e25;
+}
+
 void aco::end(){
 	cout << "Destruindo geral" << endl;
 	var.free();
+	delete runbestant;
+	delete nevalbest;
+	delete runbestval;
+	delete ant;
 	#if localsearch
+		ls->end();
+		delete ls;
 	#endif
 }
 
@@ -199,6 +219,7 @@ double aco::objective_function(double *varvalue, int section, propagacao *p){
 	//p->prob_direto(section);
 	//cout << "Varvalue: " << *varvalue << " Área: " << p->A[section] << " G: " << p->G[section] << " Gexp: " << p->Gexp[section] << " Erro: " << p->erroG(section) << endl;
 	return p->erroG(section);
+	//return pow(*varvalue-0.32, 2);
 }
 
 void aco::some_stats(int iterationno, int runno){
@@ -258,6 +279,8 @@ void lsaco::get_data(values *gvalptr, variable *varv){
 	var.increment = 0.01;
 	var.ulimit = ul;
 	var.llimit = ll;
+	var.nvalues = 0;
+	var.find_nvalue();
 	for(int i=0; i<var.nvalues; i++){
 		var.trail[i] = 0;
 		var.prob[i] = 0;
@@ -282,7 +305,6 @@ void lsaco::run(values *gvalptr, variable *varv, int section, propagacao *p, lon
 	if(bestant.ofn<gvalptr->ofn){
 		gvalptr->copy_from(&bestval);
 	}
-	end();
 }
 
 void lsaco::some_stats(int iterationno){
@@ -320,6 +342,7 @@ void lsaco::trail(){
 
 void lsaco::end(){
 	var.free();
+	delete ant;
 }
 
 trash::trash(){
