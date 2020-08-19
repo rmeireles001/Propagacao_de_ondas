@@ -3,7 +3,7 @@
 #include "propagacao.h"
 #include "aco.h"
 
-#define contagem 5
+#define contagem 2
 
 using namespace std;
 string int2str(int num);
@@ -97,6 +97,7 @@ void count_aco(FILE *resposta, string arq_areas, int inicio, int fim){
 		fprintf(resposta, "%lf\t", tempos[i]);
 		cout << tempos[i] << endl;
 	}
+	cout << "fora do for" << endl;
 	for(int i=0; i<contagem; i++){
 		med = med + tempos[i];
 	}
@@ -105,7 +106,9 @@ void count_aco(FILE *resposta, string arq_areas, int inicio, int fim){
 		var = var + pow(tempos[i] - med, 2);
 	}
 	var = var/(contagem);
+	cout << "Está para escrever" << endl;
 	fprintf(resposta, "\n\nMédia: %lf\tVariância: %lf\tDesvio-padrão: %lf\n\n\n", med, var, sqrt(var));
+	cout << "Fim dos testes ACO\n";
 }
 
 void count_lj(FILE *resposta, int inicio, int fim){
@@ -131,6 +134,7 @@ void count_lj(FILE *resposta, int inicio, int fim){
 void count_cgrasp(FILE *resposta, string arq_areas, int inicio, int fim){
 	double med=0, var=0;
 	double tempos[contagem];
+	cout << "entra?\n";
 	fprintf(resposta, "C-GRASP ÁREAS %d - %d\n\n", inicio, fim);
 	for(int i=1; i<=contagem; i++){
 		tempos[i] = run_cgrasp(inicio, fim, arq_areas, "cgrasp_run#"+int2str(i)+".txt");
