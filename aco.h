@@ -62,6 +62,7 @@ public:
 	void run(int section, propagacao *p);
 	void ls_run(int section, propagacao *p, values *gvalptr, variable *varv);
 	double get_var();
+	void lsearch(values *bval, int section, propagacao *p);
 	#if localsearch
 	lsaco *ls;
 	#endif

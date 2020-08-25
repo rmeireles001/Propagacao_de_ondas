@@ -253,6 +253,30 @@ void aco::run(int section, propagacao *p){
 		ls->run(&bestval, &var, section, p, &seed);
 	}
 	#endif
+	#if lsbasic
+	if(bestval.ofn > condicao){
+		lsearch(&bestval, section, p);
+	}
+	#endif
+}
+
+void aco::lsearch(values *bval, int section, propagacao *p){
+	double ll = bval->var - 0.05;
+	double ul = bval->var + 0.05;
+	double result;
+	if(ll<0){
+		ll = 0;
+	}
+	if(ul > 1){
+		ul = 1;
+	}
+	for(double x = ll; x<=ul; x+=0.01){
+		result = objective_function(&x, section, p);
+		if(result < bval->ofn){
+			bval->ofn = result;
+			bval->var = x;
+		}
+	}
 }
 
 double aco::get_var(){

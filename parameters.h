@@ -14,4 +14,5 @@
 #define q0 0.0
 #define localupdate 1
 #define alpha 1
-#define localsearch 1
+#define localsearch 0
+#define lsbasic 1

@@ -169,9 +169,9 @@ int main(){
 	FILE *saida = fopen("resultados_finais.txt", "w");
 	count_aco(saida, "areas2.txt", 1, 1000);
 
-	count_cgrasp(saida, "areas2.txt", 1, 1000);
+	//count_cgrasp(saida, "areas2.txt", 1, 1000);
 	
 	fclose(saida);
-	system("mkdir resultados#2\nmv resultados_finais.txt resultados#2\nmv *#*.txt resultados#2\n");
+	system("mkdir resultados#extra\nmv resultados_finais.txt resultados#extra\nmv *#*.txt resultados#extra\n");
 	return 0;
 }
