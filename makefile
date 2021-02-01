@@ -1,5 +1,7 @@
-all:	variable.o	aco.o	values.o	ant.o	main.o propagacao.o
-	g++ -o exe propagacao.o variable.o ant.o aco.o values.o main.o -lm
+all:	variable.o	aco.o	values.o	ant.o	main.o propagacao.o	arv.o
+	g++ -o exe arv.o propagacao.o variable.o ant.o aco.o values.o main.o -lm
+arv.o:	arv.h	arv.cpp
+	g++ -c arv.cpp
 propagacao.o: propagacao.h propagacao.cpp
 	g++ -c propagacao.cpp
 ant.o:	ant.cpp	ant.h

@@ -11,6 +11,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <cmath>
+#include "arv.h"
 
 using namespace std;
 
@@ -43,8 +44,14 @@ public:
 	double cgrasp(double llimit, double ulimit, double incr, int section);
 	void run_cgrasp(string arq_areas, string saida, int inicio, int fim);
 	void edit_areas();
+	void print_erro(int secao, double delta, string arq_ent, string arq_saida);
+	double binary_search(arvore *arv, double llimit, double ulimit, double delta, double secao);
+	void imprime_area(arvore *arv, int b, double delta, int secao, double llimit);
+	void imprime_eco(arvore *arv, int b, double delta, int secao, double llimit);
+	void imprimir(double valor, int b, double delta);
 };
 
 double prand(double low, double high);
 double function(double x);
+
 #endif

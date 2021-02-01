@@ -370,7 +370,7 @@ double propagacao::cgrasp(double llimit, double ulimit, double incr, int section
 	double xbest = 0;
 	double xi, xf;
 	double f;
-	double max=ulimit+0.1;
+	double max=ulimit;
 	int divisor = -2;
 	//Busca linear / construção
 	for(double x=llimit; x<=max && fbest>1e-5; x+=incr){
@@ -383,12 +383,12 @@ double propagacao::cgrasp(double llimit, double ulimit, double incr, int section
 			xbest = x;
 		}
 	}
-	while(divisor>=-5){
+	while(divisor>=-2){
 		incr = pow(10, divisor);
-		xi = xbest - incr;
+		xi = xbest - incr*5;
 		if(xi < llimit)
 			xi = llimit;
-		xf = xbest + incr;
+		xf = xbest + incr*5;
 		if(xf > ulimit)
 			xf = ulimit;
 		for(double x=xi; x<=xf && fbest>1e-5; x+=incr){
@@ -476,4 +476,85 @@ void propagacao::edit_areas(){
 		fprintf(f, "%.15lf\t%.15e\n", posicao[i], A[i]);
 	}
 	fclose(f);
+}
+
+void propagacao::print_erro(int secao, double delta, string arq_ent, string arq_saida){
+	FILE *saida = fopen(arq_saida.c_str(), "w");
+	inserir(arq_ent);
+	prob_direto(1000, Gexp);
+	prob_direto(secao, G);
+	fprintf(saida, "Posição: %d\n\nÁrea\tErro\n\n", secao);
+	for(double i=0; i<=1.001; i+=delta){
+		atribuirA(secao, i);
+		prob_inverso(secao);
+		fprintf(saida, "%lf\t%lf\n", i, erroG(secao));
+	}
+	fclose(saida);
+}
+
+double propagacao::binary_search(arvore *arv, double llimit, double ulimit, double delta, double secao){
+	double g=0, gesq=10, gdir=10;
+	double aresq=2, ardir=2, ar=2;
+	int fesq=0, fdir=0;
+	ar = arv->valor*delta+llimit;
+	atribuirA(secao, ar);
+	prob_inverso(secao);
+	g = erroG(secao);
+	if(arv->dir!=NULL){
+		ardir = arv->dir->valor*delta+llimit;
+		atribuirA(secao, ardir);
+		prob_inverso(secao);
+		gdir = erroG(secao);
+		fdir = 1;
+	}
+	if(arv->esq!=NULL){
+		aresq = arv->esq->valor*delta+llimit;
+		atribuirA(secao, aresq);
+		prob_inverso(secao);
+		gesq = erroG(secao);
+		fesq = 1;
+	}
+	/*cout << fesq << " " << (gesq<g) << " " << (aresq >= llimit) << endl;
+	cout << fdir << " " << (gdir<g) << " " << (ardir<=ulimit) << endl;*/
+	//cout << g << " " << gesq << " " << " " << gdir << endl;
+	printf("Área: %lf; Erro G: %lf\n", ar, g);
+	if(fesq && gesq<g && aresq>=llimit){
+		if(fdir && gdir<gesq && ardir<=ulimit)
+			return binary_search(arv->dir, llimit, ulimit, delta, secao);
+		return binary_search(arv->esq, llimit, ulimit, delta, secao);
+	}
+	else if(fdir && gdir<g && ardir<=ulimit){
+		return binary_search(arv->dir, llimit, ulimit, delta, secao);
+	}
+	return ar;
+}
+
+void propagacao::imprime_area(arvore *arv, int b, double delta, int secao, double llimit){
+    if(arv==NULL){
+        for(int i=0; i<b; i++) cout << "\t";
+        cout << "*\n";
+        return;
+    }
+    imprime_area(arv->dir, b+2, delta, secao, llimit);
+    imprimir(arv->valor*delta+llimit, b, delta);
+    imprime_area(arv->esq, b+2, delta, secao, llimit);
+}
+
+void propagacao::imprime_eco(arvore *arv, int b, double delta, int secao, double llimit){
+    if(arv==NULL){
+        for(int i=0; i<b; i++) cout << "\t";
+        cout << "*\n";
+        return;
+    }
+    imprime_eco(arv->dir, b+2, delta, secao, llimit);
+	atribuirA(secao, arv->valor*delta+llimit);
+	prob_inverso(secao);
+    imprimir(erroG(secao), b, delta);
+	imprimir(arv->valor*delta+llimit, b, delta);
+    imprime_eco(arv->esq, b+2, delta, secao, llimit);
+}
+
+void propagacao::imprimir(double valor, int b, double delta){
+    for(int i=0; i<b; i++) cout << "\t";
+    cout << valor << endl;
 }

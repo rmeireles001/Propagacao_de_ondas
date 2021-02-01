@@ -3,7 +3,7 @@
 #include "propagacao.h"
 #include "aco.h"
 
-#define contagem 2
+#define contagem 1000
 
 using namespace std;
 string int2str(int num);
@@ -50,11 +50,11 @@ double run_aco(int inicio, int fim, string arq_areas, string runn){
 	return (double)(end-start)/(double)(CLOCKS_PER_SEC);
 }
 
-double run_lj(int inicio, int fim, string runn){
+double run_lj(int inicio, int fim, string arq_areas, string runn){
 	clock_t start, end;
 	double img;
 	propagacao p;
-	p.inserir("areas.txt");
+	p.inserir(arq_areas);
 	p.prob_direto(1000, p.Gexp);
 	p.prob_direto(inicio, p.G);
 	start = clock();
@@ -111,12 +111,12 @@ void count_aco(FILE *resposta, string arq_areas, int inicio, int fim){
 	cout << "Fim dos testes ACO\n";
 }
 
-void count_lj(FILE *resposta, int inicio, int fim){
+void count_lj(FILE *resposta, string arq_areas, int inicio, int fim){
 	double med=0, var=0;
 	double tempos[contagem];
 	fprintf(resposta, "LUUS JAAKOLA ÁREAS %d - %d\n\n", inicio, fim);
 	for(int i=1; i<=contagem; i++){
-		tempos[i] = run_lj(inicio, fim, "lj_run#"+int2str(i)+".txt");
+		tempos[i] = run_lj(inicio, fim, arq_areas, "lj_run#"+int2str(i)+".txt");
 		fprintf(resposta, "%lf\t", tempos[i]);
 		cout << tempos[i] << endl;
 	}
@@ -163,15 +163,54 @@ string int2str(int num){
 	return ret;
 }
 
+double run_binary(int inicio, int fim, string arq_areas, string runn){
+	clock_t start, end;
+	double img;
+	propagacao p;
+	p.inserir(arq_areas);
+	p.prob_direto(1000, p.Gexp);
+	p.prob_direto(inicio, p.G);
+	arvore *arv = insert_partition(0, 20);
+	arvore *arv_local = insert_partition(0, 10);
+	//imprime_arvore(arv, 1);
+	start = clock();
+	for(int i=inicio; i<=fim; i++){
+		cout << i << endl;
+		img = p.binary_search(arv, 0, 1.00, 0.05, i);
+		//cout << img-0.05 << " " << img+0.05 << endl;
+		/*if(i==499||i==500){
+			cout << endl << endl << i << endl;
+			p.imprime_eco(arv, 2, 0.05, i, 0);
+			cout << endl << endl << "--------------------------------" << endl << endl;
+			p.imprime_eco(arv_local, 2, 0.01, i, img-0.05);
+			
+		}*/
+			img = p.binary_search(arv_local, img-0.05, img+0.05, 0.01, i);
+		//img = p.binary_search(arv, img-0.05,img+0.05, 0.01, i);
+		p.atribuirA(i, img);
+		p.prob_inverso(i);
+	}
+	//p.imprime_eco(arv, 2, 0.05, 494);
+	end = clock();
+	p.imprime_eco(arv, 2, 0.05, 498, 0);
+	p.escrever_txt(runn, "BINARY-SEARCH", (double)(end-start)/(double)(CLOCKS_PER_SEC), 0, fim);
+	//p.imprime_area(arv, 1, 0.05, 498);
+	return (double)(end-start)/(double)(CLOCKS_PER_SEC);
+}
+
 int main(){
 	srand(time(NULL));
-
-	FILE *saida = fopen("resultados_finais.txt", "w");
-	count_aco(saida, "areas2.txt", 1, 1000);
-
-	//count_cgrasp(saida, "areas2.txt", 1, 1000);
-	
+	//cout << run_binary(491, 505, "areas.txt", "binary_search");
+	/*propagacao p;
+	p.print_erro(498, 0.01, "areas.txt", "teste_secao_498");*/
+	FILE *saida = fopen("resultados_finaislj.txt", "w");
+	count_lj(saida, "areas.txt", 1, 1000);	
 	fclose(saida);
-	system("mkdir resultados#extra\nmv resultados_finais.txt resultados#extra\nmv *#*.txt resultados#extra\n");
+	system("mv resultados_finaislj.txt resultados#1\nmv *#*.txt resultados#1\n");
+	saida = fopen("resultados_finaislj.txt", "w");
+	count_lj(saida, "areas2.txt", 1, 1000);	
+	fclose(saida);
+	system("mv resultados_finaislj.txt resultados#2\nmv *#*.txt resultados#2\n");
+	
 	return 0;
 }
