@@ -134,7 +134,6 @@ void count_lj(FILE *resposta, string arq_areas, int inicio, int fim){
 void count_cgrasp(FILE *resposta, string arq_areas, int inicio, int fim){
 	double med=0, var=0;
 	double tempos[contagem];
-	cout << "entra?\n";
 	fprintf(resposta, "C-GRASP ÁREAS %d - %d\n\n", inicio, fim);
 	for(int i=1; i<=contagem; i++){
 		tempos[i] = run_cgrasp(inicio, fim, arq_areas, "cgrasp_run#"+int2str(i)+".txt");
@@ -163,54 +162,69 @@ string int2str(int num){
 	return ret;
 }
 
-double run_binary(int inicio, int fim, string arq_areas, string runn){
+double run_ord(int inicio, int fim, string arq_areas, string runn){
 	clock_t start, end;
 	double img;
 	propagacao p;
 	p.inserir(arq_areas);
 	p.prob_direto(1000, p.Gexp);
 	p.prob_direto(inicio, p.G);
-	arvore *arv = insert_partition(0, 20);
-	arvore *arv_local = insert_partition(0, 10);
-	//imprime_arvore(arv, 1);
+	p.prob_inverso();
+	ord *vetor = new ord[21];
 	start = clock();
 	for(int i=inicio; i<=fim; i++){
 		cout << i << endl;
-		img = p.binary_search(arv, 0, 1.00, 0.05, i);
-		//cout << img-0.05 << " " << img+0.05 << endl;
-		/*if(i==499||i==500){
-			cout << endl << endl << i << endl;
-			p.imprime_eco(arv, 2, 0.05, i, 0);
-			cout << endl << endl << "--------------------------------" << endl << endl;
-			p.imprime_eco(arv_local, 2, 0.01, i, img-0.05);
-			
-		}*/
-			img = p.binary_search(arv_local, img-0.05, img+0.05, 0.01, i);
-		//img = p.binary_search(arv, img-0.05,img+0.05, 0.01, i);
+		img = p.busca_ordenada(vetor, i, 0.05, 0, 1);
 		p.atribuirA(i, img);
 		p.prob_inverso(i);
+		if(vetor[0].ggexp>1e-3){
+			cout << "ls" << endl;
+			double llimit = img-0.05;
+			double ulimit = img+0.05;
+			if(llimit<0.00){
+				llimit = 0.00;
+			}
+			if(ulimit>1.00){
+				ulimit = 1.00;
+			}
+			img = p.busca_ordenada(vetor, i, 0.01, llimit, ulimit);
+			p.atribuirA(i, img);
+			p.prob_inverso(i);
+		}
 	}
-	//p.imprime_eco(arv, 2, 0.05, 494);
 	end = clock();
-	p.imprime_eco(arv, 2, 0.05, 498, 0);
-	p.escrever_txt(runn, "BINARY-SEARCH", (double)(end-start)/(double)(CLOCKS_PER_SEC), 0, fim);
+	p.escrever_txt(runn, "ORD_SEARCH", (double)(end-start)/(double)(CLOCKS_PER_SEC), 1, fim);
 	//p.imprime_area(arv, 1, 0.05, 498);
+	delete vetor;
 	return (double)(end-start)/(double)(CLOCKS_PER_SEC);
+}
+
+void count_ord(FILE *resposta, string arq_areas, int inicio, int fim){
+	double med=0, var=0;
+	double tempos[contagem];
+	fprintf(resposta, "C-GRASP ÁREAS %d - %d\n\n", inicio, fim);
+	for(int i=1; i<=contagem; i++){
+		tempos[i] = run_ord(inicio, fim, arq_areas, "ords_run#"+int2str(i)+".txt");
+		fprintf(resposta, "%lf\t", tempos[i]);
+		cout << tempos[i] << endl;
+	}
+	for(int i=0; i<contagem; i++){
+		med = med + tempos[i];
+	}
+	med=med/contagem;
+	for(int i=0; i<contagem; i++){
+		var = var + pow(tempos[i] - med, 2);
+	}
+	var = var/(contagem);
+	fprintf(resposta, "\n\nMédia: %lf\tVariância: %lf\tDesvio-padrão: %lf\n\n\n", med, var, sqrt(var));
 }
 
 int main(){
 	srand(time(NULL));
-	//cout << run_binary(491, 505, "areas.txt", "binary_search");
+	//cout << run_ord(1, 1000, "areas.txt", "ord_search#1.txt");
+	cout << run_ord(1, 1000, "areas2.txt", "ord_search#2.txt");
+	//cout << run_cgrasp(1, 1000, "areas.txt", "linear.txt");
 	/*propagacao p;
 	p.print_erro(498, 0.01, "areas.txt", "teste_secao_498");*/
-	FILE *saida = fopen("resultados_finaislj.txt", "w");
-	count_lj(saida, "areas.txt", 1, 1000);	
-	fclose(saida);
-	system("mv resultados_finaislj.txt resultados#1\nmv *#*.txt resultados#1\n");
-	saida = fopen("resultados_finaislj.txt", "w");
-	count_lj(saida, "areas2.txt", 1, 1000);	
-	fclose(saida);
-	system("mv resultados_finaislj.txt resultados#2\nmv *#*.txt resultados#2\n");
-	
 	return 0;
 }

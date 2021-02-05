@@ -383,6 +383,7 @@ double propagacao::cgrasp(double llimit, double ulimit, double incr, int section
 			xbest = x;
 		}
 	}
+	cout << endl;
 	while(divisor>=-2){
 		incr = pow(10, divisor);
 		xi = xbest - incr*5;
@@ -484,10 +485,19 @@ void propagacao::print_erro(int secao, double delta, string arq_ent, string arq_
 	prob_direto(1000, Gexp);
 	prob_direto(secao, G);
 	fprintf(saida, "Posição: %d\n\nÁrea\tErro\n\n", secao);
-	for(double i=0; i<=1.001; i+=delta){
+	int max_value = 1/delta;
+	/*for(double i=0; i<=1.001; i+=delta){
 		atribuirA(secao, i);
 		prob_inverso(secao);
 		fprintf(saida, "%lf\t%lf\n", i, erroG(secao));
+	}*/
+	for(int sec=480; sec<=520; sec++){
+		for(int i=0; i<=max_value; i++){
+			atribuirA(sec, i*delta);
+			prob_inverso(sec);
+			fprintf(saida, "%lf\t", erroG(sec));
+		}
+		fprintf(saida, "\n");
 	}
 	fclose(saida);
 }
@@ -517,7 +527,6 @@ double propagacao::binary_search(arvore *arv, double llimit, double ulimit, doub
 	/*cout << fesq << " " << (gesq<g) << " " << (aresq >= llimit) << endl;
 	cout << fdir << " " << (gdir<g) << " " << (ardir<=ulimit) << endl;*/
 	//cout << g << " " << gesq << " " << " " << gdir << endl;
-	printf("Área: %lf; Erro G: %lf\n", ar, g);
 	if(fesq && gesq<g && aresq>=llimit){
 		if(fdir && gdir<gesq && ardir<=ulimit)
 			return binary_search(arv->dir, llimit, ulimit, delta, secao);
@@ -557,4 +566,57 @@ void propagacao::imprime_eco(arvore *arv, int b, double delta, int secao, double
 void propagacao::imprimir(double valor, int b, double delta){
     for(int i=0; i<b; i++) cout << "\t";
     cout << valor << endl;
+}
+
+double propagacao::busca_ordenada(ord *vet, int secao, double delta, double llimit, double ulimit){
+	int max_value = (int)((ulimit-llimit)/delta);
+	cout << "Max value " << max_value << endl;
+	for(int i=0; i<=max_value; i++){
+		vet[i].area = ((double) i)*delta+llimit;
+		atribuirA(secao, vet[i].area);
+		prob_inverso(secao);
+		vet[i].ggexp = erroG(secao);
+		cout << i << "\t";
+	}
+	cout << max_value << endl << endl;
+	for(int i=0; i<=max_value; i++){
+		cout << vet[i].ggexp << "\t";
+	}
+	cout << endl;
+	quickSort(vet, 0, max_value);
+	return vet[0].area;
+}
+
+int propagacao::part(ord *vetor, int ini, int fim){
+    int left, right;
+	//double pivo;
+	ord aux, pivo;
+    left = ini;
+    right = fim;
+    pivo = vetor[ini];
+    while(left<right){
+        while(vetor[left].ggexp<=pivo.ggexp&&left<=fim){
+            left++;
+        }
+        while(vetor[right].ggexp>pivo.ggexp&&right>=ini){
+            right--;
+        }
+        if(left<right){
+            aux = vetor[left];
+            vetor[left] = vetor[right];
+            vetor[right] = aux;
+        }
+    }
+    vetor[ini] = vetor[right];
+    vetor[right] = pivo;
+    return right;
+}
+
+void propagacao::quickSort(ord *vetor, int ini, int fim){
+    int pivo;
+    if(fim>ini){
+        pivo = part(vetor, ini, fim);
+        quickSort(vetor, ini, pivo-1);
+        quickSort(vetor, pivo+1, fim);
+    }
 }

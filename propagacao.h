@@ -15,6 +15,11 @@
 
 using namespace std;
 
+struct ord{
+	double area;
+	double ggexp;
+};
+
 class propagacao{
 public:
 	double *Gexp, *G, *A, *Z, *R, *F, *P, *posicao;
@@ -49,6 +54,9 @@ public:
 	void imprime_area(arvore *arv, int b, double delta, int secao, double llimit);
 	void imprime_eco(arvore *arv, int b, double delta, int secao, double llimit);
 	void imprimir(double valor, int b, double delta);
+	double busca_ordenada(ord *vet, int secao, double delta, double llimit, double ulimit);
+	int part(ord *vetor, int ini, int fim);
+	void quickSort(ord *vetor, int ini, int fim);
 };
 
 double prand(double low, double high);
