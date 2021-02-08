@@ -570,19 +570,12 @@ void propagacao::imprimir(double valor, int b, double delta){
 
 double propagacao::busca_ordenada(ord *vet, int secao, double delta, double llimit, double ulimit){
 	int max_value = (int)((ulimit-llimit)/delta);
-	cout << "Max value " << max_value << endl;
 	for(int i=0; i<=max_value; i++){
 		vet[i].area = ((double) i)*delta+llimit;
 		atribuirA(secao, vet[i].area);
 		prob_inverso(secao);
 		vet[i].ggexp = erroG(secao);
-		cout << i << "\t";
 	}
-	cout << max_value << endl << endl;
-	for(int i=0; i<=max_value; i++){
-		cout << vet[i].ggexp << "\t";
-	}
-	cout << endl;
 	quickSort(vet, 0, max_value);
 	return vet[0].area;
 }
