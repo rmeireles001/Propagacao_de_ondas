@@ -3,7 +3,7 @@
 #include "propagacao.h"
 #include "aco.h"
 
-#define contagem 10
+#define contagem 1000
 
 using namespace std;
 string int2str(int num);
@@ -93,9 +93,8 @@ void count_aco(FILE *resposta, string arq_areas, int inicio, int fim){
 	fprintf(resposta, "ANTCOLONY OPTIMIZATION ÁREAS %d - %d\n\n", inicio, fim);
 	for(int i=1; i<=contagem; i++){
 		cout << "entou\n";
-		tempos[i] = run_aco(inicio, fim, arq_areas, "aco_run#"+int2str(i)+".txt");
-		fprintf(resposta, "%lf\t", tempos[i]);
-		cout << tempos[i] << endl;
+		tempos[i-1] = run_aco(inicio, fim, arq_areas, "aco_run#"+int2str(i)+".txt");
+		fprintf(resposta, "%lf\t", tempos[i-1]);
 	}
 	cout << "fora do for" << endl;
 	for(int i=0; i<contagem; i++){
@@ -116,9 +115,8 @@ void count_lj(FILE *resposta, string arq_areas, int inicio, int fim){
 	double tempos[contagem];
 	fprintf(resposta, "LUUS JAAKOLA ÁREAS %d - %d\n\n", inicio, fim);
 	for(int i=1; i<=contagem; i++){
-		tempos[i] = run_lj(inicio, fim, arq_areas, "lj_run#"+int2str(i)+".txt");
-		fprintf(resposta, "%lf\t", tempos[i]);
-		cout << tempos[i] << endl;
+		tempos[i-1] = run_lj(inicio, fim, arq_areas, "lj_run#"+int2str(i)+".txt");
+		fprintf(resposta, "%lf\t", tempos[i-1]);
 	}
 	for(int i=0; i<contagem; i++){
 		med = med + tempos[i];
@@ -136,9 +134,8 @@ void count_cgrasp(FILE *resposta, string arq_areas, int inicio, int fim){
 	double tempos[contagem];
 	fprintf(resposta, "C-GRASP ÁREAS %d - %d\n\n", inicio, fim);
 	for(int i=1; i<=contagem; i++){
-		tempos[i] = run_cgrasp(inicio, fim, arq_areas, "cgrasp_run#"+int2str(i)+".txt");
-		fprintf(resposta, "%lf\t", tempos[i]);
-		cout << tempos[i] << endl;
+		tempos[i-1] = run_cgrasp(inicio, fim, arq_areas, "cgrasp_run#"+int2str(i)+".txt");
+		fprintf(resposta, "%lf\t", tempos[i-1]);
 	}
 	for(int i=0; i<contagem; i++){
 		med = med + tempos[i];
@@ -202,11 +199,10 @@ double run_ord(int inicio, int fim, string arq_areas, string runn){
 void count_ord(FILE *resposta, string arq_areas, int inicio, int fim){
 	double med=0, var=0;
 	double tempos[contagem];
-	fprintf(resposta, "ORD ÁREAS %d - %d\n\n", inicio, fim);
+	fprintf(resposta, "ORDENAÇÃO-BINÁRIA ÁREAS %d - %d\n\n", inicio, fim);
 	for(int i=1; i<=contagem; i++){
-		tempos[i] = run_ord(inicio, fim, arq_areas, "ords_run#"+int2str(i)+".txt");
-		fprintf(resposta, "%lf\t", tempos[i]);
-		cout << tempos[i] << endl;
+		tempos[i-1] = run_ord(inicio, fim, arq_areas, "ords_run#"+int2str(i)+".txt");
+		fprintf(resposta, "%lf\t", tempos[i-1]);
 	}
 	for(int i=0; i<contagem; i++){
 		med = med + tempos[i];
@@ -222,12 +218,18 @@ void count_ord(FILE *resposta, string arq_areas, int inicio, int fim){
 int main(){
 	srand(time(NULL));
 	FILE *results = fopen("res.txt", "w");
+	count_lj(results, "areas.txt", 1, 1000);
 	count_ord(results, "areas.txt", 1, 1000);
+	count_aco(results, "areas.txt", 1, 1000);
+	count_cgrasp(results, "areas.txt", 1, 1000);
 	fclose(results);
-	system("mkdir results\nmv ords_run#*.txt results\nmv res.txt results");
+	system("mkdir results\nmv *_run#*.txt results\nmv res.txt results");
 	results = fopen("res.txt", "w");
+	count_lj(results, "areas2.txt", 1, 1000);
 	count_ord(results, "areas2.txt", 1, 1000);
+	count_aco(results, "areas2.txt", 1, 1000);
+	count_cgrasp(results, "areas2.txt", 1, 1000);
 	fclose(results);
-	system("mkdir results2\nmv ords_run#*.txt results2\nmv res.txt results2");
+	system("mkdir results2\nmv *_run#*.txt results2\nmv res.txt results2");
 	return 0;
 }
