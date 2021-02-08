@@ -3,7 +3,7 @@
 #include "propagacao.h"
 #include "aco.h"
 
-#define contagem 1000
+#define contagem 10
 
 using namespace std;
 string int2str(int num);
@@ -202,7 +202,7 @@ double run_ord(int inicio, int fim, string arq_areas, string runn){
 void count_ord(FILE *resposta, string arq_areas, int inicio, int fim){
 	double med=0, var=0;
 	double tempos[contagem];
-	fprintf(resposta, "C-GRASP ÁREAS %d - %d\n\n", inicio, fim);
+	fprintf(resposta, "ORD ÁREAS %d - %d\n\n", inicio, fim);
 	for(int i=1; i<=contagem; i++){
 		tempos[i] = run_ord(inicio, fim, arq_areas, "ords_run#"+int2str(i)+".txt");
 		fprintf(resposta, "%lf\t", tempos[i]);
@@ -221,10 +221,13 @@ void count_ord(FILE *resposta, string arq_areas, int inicio, int fim){
 
 int main(){
 	srand(time(NULL));
-	//cout << run_ord(1, 1000, "areas.txt", "ord_search#1.txt");
-	cout << run_ord(1, 1000, "areas2.txt", "ord_search#2.txt");
-	//cout << run_cgrasp(1, 1000, "areas.txt", "linear.txt");
-	/*propagacao p;
-	p.print_erro(498, 0.01, "areas.txt", "teste_secao_498");*/
+	FILE *results = fopen("res.txt", "w");
+	count_ord(results, "areas.txt", 1, 1000);
+	fclose(results);
+	system("mkdir results\nmv ords_run#*.txt results\nmv res.txt results");
+	results = fopen("res.txt", "w");
+	count_ord(results, "areas2.txt", 1, 1000);
+	fclose(results);
+	system("mkdir results2\nmv ords_run#*.txt results2\nmv res.txt results2");
 	return 0;
 }
