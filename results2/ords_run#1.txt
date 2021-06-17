@@ -1004,4 +1004,4 @@ POSIÇÃO	ÁREA(mm²)	CUSTO
 1000	9.800000000000000e-01	0
 
 
-Tempo gasto: 9.568616
+Tempo gasto: 9.590643
