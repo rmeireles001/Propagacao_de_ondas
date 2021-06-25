@@ -1,0 +1,42 @@
+Beam#1
+-------------------
+
+Algorithm: ANT COLONY OPTIMIZATION
+Worst run: 25
+Worst time: 14.935629
+Best run: 419
+Best time: 11.728936
+
+Algorithm: LUUS-JAAKOLA
+Worst run: 384
+Worst time: 93.275987
+Best run: 691
+Best time: 6.192455
+
+Algorithm: C-GRASP
+Worst run: 842
+Worst time: 11.001242
+Best run: 392
+Best time: 10.811334
+
+Beam#2
+-------------------
+
+Algorithm: ANT COLONY OPTIMIZATION
+Worst run: 216
+Worst time: 84.961765
+Best run: 870
+Best time: 83.252686
+
+Algorithm: LUUS-JAAKOLA
+Worst run: 878
+Worst time: 93.117664
+Best run: 291
+Best time: 12.296676
+
+Algorithm: C-GRASP
+Worst run: 267
+Worst time: 10.237298
+Best run: 576
+Best time: 10.115815
+
