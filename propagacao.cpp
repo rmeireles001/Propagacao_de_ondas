@@ -285,29 +285,30 @@ double propagacao::luus_jaakola(int pos){
 	qbest = 1000;
 	i = 1.0;
 	condicao = pow(10, -5);
-	while(qbest > condicao && PAROU<500){
-		randomico = prand(0, 1);
-		Rr = ((-0.5 + randomico)*(r));
-		newconfig = oldconfig + Rr;
-		if(newconfig < mini){
-			newconfig = mini;
+	while(qbest > condicao && PAROU<30){
+		for(int k=0; k<10; k++){
+			randomico = prand(0, 1);
+			Rr = ((-0.5 + randomico)*(r));
+			newconfig = oldconfig + Rr;
+			if(newconfig < mini){
+				newconfig = mini;
+			}
+			if(newconfig > maxi){
+				newconfig = maxi;
+			}
+			atribuirA(pos, newconfig);
+			prob_inverso(pos);
+			aux1 = erroG(pos);
+			custo++;
+			atribuirA(pos, oldconfig);
+			prob_inverso(pos);
+			aux2 = erroG(pos);
+			custo++;
+			if(aux1<=aux2){
+				qbest = aux1;
+				oldconfig = newconfig;
+			}
 		}
-		if(newconfig > maxi){
-			newconfig = maxi;
-		}
-		atribuirA(pos, newconfig);
-		prob_inverso(pos);
-		aux1 = erroG(pos);
-		custo++;
-		atribuirA(pos, oldconfig);
-		prob_inverso(pos);
-		aux2 = erroG(pos);
-		custo++;
-		if(aux1<=aux2){
-			qbest = aux1;
-			oldconfig = newconfig;
-		}
-
 		i++;
 		PAROU++;
 		r = ((1 - eps)*r);
